@@ -1,0 +1,26 @@
+{
+  "name": "ome_figure_hack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hack.js",
+  "scripts": {
+    "babel": "babel --presets env hack.js -o hack.bundle.js",
+    "min": "uglifyjs hack.bundle.js -o min.bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thejohnhoffer/ome_figure_hack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thejohnhoffer/ome_figure_hack/issues"
+  },
+  "homepage": "https://github.com/thejohnhoffer/ome_figure_hack#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "uglify-js": "^3.4.0"
+  }
+}
