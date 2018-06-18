@@ -1,0 +1,7 @@
+// ==UserScript==
+// @name        Omero Figure Channel Names
+// @namespace   http://hoff.in
+// @include     https://omero.*/figure/
+// @version     1
+// ==/UserScript==
+
