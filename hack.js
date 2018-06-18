@@ -1,10 +1,17 @@
 (function() {
+  var MODELS = window.figureModel.panels.models;
+  var MODEL = MODELS.filter(m=>m.attributes.selected)[0]; 
+  var LABELS = MODEL.attributes.channels.map(c => c.label); 
+  var ID = MODEL.attributes.imageId; 
+  var URL = "https://omero.hms.harvard.edu/pathviewer/viewer/" + ID + "/channelgroups";
+
+
   var setSliderContent = (content, i) => {
     var root = 'channel_sliders';
     var sliders = document.getElementById(root).firstChild;
     var output = document.createElement("span");
     output.style.textOverflow = "ellipsis";
-    output.style.verticalAlign = "middle";
+    output.style.marginTop = "-15px";
     output.style.textAlign = "center";
     output.style.position = "absolute";
     output.style.lineHeight = "100%";
@@ -19,52 +26,36 @@
       console.error('No button ' + i + ' for ' + content);
     }
   }
-  // Define Element Styles
-  var readLine = (result, l, i) => {
-    var [name, cycle] = l;
-    var content = name
-    if (result.count !== cycle) {
-      result.count = cycle;
-      content = "(" + cycle + "):" + name;
-    }
-    result.list.push(content);
-    return result;
+  var readGroup = (list, group) => {
+    return list.concat(group.channels.map((channel, i) => {
+      var label = LABELS[channel];
+      if (i == 0) {
+        return group.name + ": " + label;
+      }
+      return "" + label;
+    }));
   }
-  // Validate cycles
-  var cleanLine = l => {
-    var [name, cycle] = l.split(',');
-    cycle = parseInt(cycle, 10);
-    if (isNaN(cycle)) {
-      return false;
-    }
-    return [name, cycle];
+
+  var readJSON = response => {
+    var groups = JSON.parse(response).groups;
+    var config_list = groups.reduce(readGroup, []);
+    config_list.forEach(setSliderContent);
+    document.body.addEventListener('mouseup', ()=>{
+      window.setTimeout(() => {
+        config_list.forEach(setSliderContent);
+      }, 100);
+    }, true); 
   }
-  // Handle the csv file
-  var readFile = f => {
-    var reader = new FileReader();
-    reader.onload = function(progressEvent){
-      var lines = this.result.split('\n').map(cleanLine).filter(Boolean);
-      var config = lines.reduce(readLine, {list: []});
-      config.list.forEach(setSliderContent);
-      document.body.addEventListener('mouseup', ()=>{
-        window.setTimeout(() => {
-          config.list.forEach(setSliderContent);
-        }, 100);
-      }, true); 
-    };
-    reader.readAsText(f);
-  };
-  // Present UI for uploading file
-  var input = document.createElement("input");
-  input.type = "file";
-  input.style = "position:fixed; top:0; width:100%; height:100%; background:white; z-index: 999;";
-  input.addEventListener('change', evt => {
-    document.body.removeChild(input);
-    var f = evt.target.files[0];
-    if (f.type.match('.*csv') || f.name.match('.*csv')){
-      readFile(f);
+  var loadJSON = function(url) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        readJSON(this.responseText);
+      }
     }
-  });
-  document.body.appendChild(input);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }
+  loadJSON(URL);
 })();
 
