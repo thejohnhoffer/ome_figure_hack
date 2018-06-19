@@ -6,7 +6,7 @@
 
 ## Result
 
-- Open [Omero Figure][figure] to see groups and labels per channel.
+- Open [Omero Figure][figure] to see channel labels (hover mouse over labels for groups).
 
 [monkey]: https://tampermonkey.net/
 [figure]: https://omero.hms.harvard.edu/figure/
