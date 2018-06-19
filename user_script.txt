@@ -4,6 +4,6 @@
 // @description Adds to Omero Figure: labels by group and channel.
 // @author      John Hoffer and Jeremy Muhlich
 // @namespace   http://hoff.in
-// @version     1.2.2
+// @version     1.2.3
 // ==/UserScript==
 

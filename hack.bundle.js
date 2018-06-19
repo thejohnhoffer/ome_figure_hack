@@ -31,7 +31,7 @@
     output.style.lineHeight = "100%";
     output.style.height = "100%";
     output.style.width = "100%";
-    output.innerText = content;
+    output.innerText = content.label;
     return output;
   };
   var setSliderContent = function setSliderContent(content, i) {
@@ -45,6 +45,7 @@
     }
     if (group.children.length === 3) {
       group.appendChild(makeSpan(content));
+      group.title = content.group;
     }
   };
 
@@ -62,15 +63,18 @@
       return runLoop(config);
     }, 100);
   };
-  var readGroup = function readGroup(list, group) {
-    var labels = getLabels();
-    return list.concat(group.channels.map(function (cid, i) {
-      var label = labels[cid];
-      if (i == 0) {
-        return group.name + ": " + label;
-      }
-      return "" + label;
-    }));
+  var readGroup = function readGroup(groupMap, group) {
+    group.channels.map(function (cid, i) {
+      groupMap.set(cid, group.name);
+    });
+    return groupMap;
+  };
+  var formatLabel = function formatLabel(label, i) {
+    var group = this.get(i) || 'Ungroupd';
+    return {
+      "label": label,
+      "group": group
+    };
   };
   var loadJSON = function loadJSON(url) {
     return new Promise(function (resolve, reject) {
@@ -78,10 +82,11 @@
       xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
           var result = JSON.parse(this.responseText);
-          var list = result.groups.reduce(readGroup, []);
+          var groupMap = result.groups.reduce(readGroup, new Map());
+          var groupList = getLabels().map(formatLabel, groupMap);
           // runLoop
           resolve({
-            "list": list,
+            "list": groupList,
             "url": url
           });
         }
