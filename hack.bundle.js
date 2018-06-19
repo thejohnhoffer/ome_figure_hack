@@ -3,8 +3,10 @@
 (function () {
   // Backbone functions
   var getModel = function getModel(key) {
-    var model = window.figureModel.panels.getSelected().at(0);
-    return model ? model.get(key, undefined) : undefined;
+    if (figureModel) {
+      var model = figureModel.panels.getSelected().at(0);
+      return model ? model.get(key, undefined) : undefined;
+    }
   };
   var getLabels = function getLabels() {
     return getModel('channels').map(function (c) {
@@ -88,6 +90,5 @@
       xhttp.send();
     });
   };
-  var url = getUrl();
-  loadJSON(url).then(runLoop);
+  runLoop({});
 })();

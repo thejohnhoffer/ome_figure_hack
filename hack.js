@@ -1,8 +1,10 @@
 (function() {
   // Backbone functions
   var getModel = key => {
-    var model = window.figureModel.panels.getSelected().at(0);
-    return model? model.get(key, undefined): undefined;
+    if (figureModel) {
+      var model = figureModel.panels.getSelected().at(0);
+      return model? model.get(key, undefined): undefined;
+    }
   }
   var getLabels = () => {
     return getModel('channels').map(c => { return c.label });
@@ -83,6 +85,5 @@
       xhttp.send();
     })
   }
-  var url = getUrl();
-  loadJSON(url).then(runLoop);
+  runLoop({});
 })();
