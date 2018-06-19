@@ -4,9 +4,9 @@
   "description": "",
   "main": "hack.js",
   "scripts": {
-    "babel": "babel --presets env hack.js -o build/hack.bundle.js",
-    "min": "uglifyjs build/hack.bundle.js -o build/min.bundle.js",
-    "user": "cat user_script.txt build/min.bundle.js > build/ome_figure.user.js",
+    "babel": "babel --presets env hack.js -o hack.bundle.js",
+    "min": "uglifyjs hack.bundle.js -o min.bundle.js",
+    "user": "cat user_script.txt min.bundle.js > ome_figure.user.js",
     "build": "npm run babel && npm run min && npm run user"
   },
   "repository": {
