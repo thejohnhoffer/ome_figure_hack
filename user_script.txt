@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name        Omero Figure Channel Names
 // @match       https://omero.hms.harvard.edu/figure/*
+// @description Adds to Omero Figure: labels by group and channel.
+// @author      John Hoffer and Jeremy Muhlich
 // @namespace   http://hoff.in
-// @version     1.2
+// @version     1.2.1
 // ==/UserScript==
 
